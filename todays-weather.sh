@@ -20,8 +20,10 @@ if [ $? -eq 0 ]; then
     temperature=$(echo "$response" | jq '.main.temp')
     description=$(echo "$response" | jq -r '.weather[0].description')
 
+    temperature_fahrenheit=$(echo "scale=2; ($temperature - 273.15) * 9/5 + 32" | bc)
+
     echo "Weather in $zip_code:"
-    echo "Temperature: $temperature °K"
+    echo "Temperature: $temperature_fahrenheit °F"
     echo "Description: $description"
 else
     echo "Error: Failed to retrieve weather data"
