@@ -17,14 +17,17 @@ response=$(curl -s "$api_url")
 
 if [ $? -eq 0 ]; then
     # Parse JSON response using jq
-    temperature=$(echo "$response" | jq '.main.temp')
+    temperature=$(echo "$response" | jq -r '.main.temp')
     description=$(echo "$response" | jq -r '.weather[0].description')
+    city=$(echo "$response" | jq -r '.name')
 
     temperature_fahrenheit=$(echo "scale=2; ($temperature - 273.15) * 9/5 + 32" | bc)
 
     echo "Weather in $zip_code:"
     echo "Temperature: $temperature_fahrenheit °F"
     echo "Description: $description"
+    echo "City: $city"
+    echo "Date: $(date +%c)"
 else
     echo "Error: Failed to retrieve weather data"
 fi
